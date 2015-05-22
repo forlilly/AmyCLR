@@ -1,0 +1,64 @@
+##
+## This function creates a special "matrix" object that can cache
+## its inverse. It has 4 sub-functions: set, get, set_inv, get_inv
+##
+makeCacheMatrix <- function(x = matrix()) {
+
+        ## Initialization
+        res <- NULL 
+
+        ## follow the same logic given in Roger's sample code
+        ## set the value
+        set <- function(y) { 
+                x <<- y
+                res <<- NULL
+        }
+
+        ## get the value
+        get <- function() x 
+
+        ## set the inversed matrix
+        set_inv <- function(inv) res <<- inv
+
+        ## get the inversed matrix
+        get_inv <- function() res
+        list(set = set, get = get,
+             set_inv = set_inv,
+             get_inv = get_inv)
+
+
+}
+
+##
+## This function computes the inverse of the special "matrix" 
+## returned by makeCacheMatrix above. If the inverse has 
+## already been calculated (and the matrix has not changed), 
+## then cacheSolve should retrieve the inverse from the cache.
+##
+cacheSolve <- function(x, ...) {
+        ## Return a matrix that is the inverse of 'x'
+        m <- x$get_inv()
+        if(!is.null(m)) {
+                message("getting cached data")
+                return(m)
+        }
+        data <- x$get()
+        m <- solve(data) ## Roger's hint
+        x$set_inv(m) ## set it
+        m ## return the result
+}
+
+## 
+## QA
+## 
+## test1<-matrix(runif(10,1,20), 2, 2)
+## test1
+## test2<-makeCacheMatrix(test1)
+## test3a<-cacheSolve(test2)
+## test3a
+## test3b<-cacheSolve(test2)
+## test3b
+## test3c<-cacheSolve(test2)
+## test3c
+
+
